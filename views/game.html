@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+    <title>Banned</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+    <!-- import the webpage's stylesheet -->
+    
+    <!-- import the webpage's client-side javascript file -->
+   <script>
+     //window.location= "/banned.html"
+    var socket = io()
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.7/linkify.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.7/linkify-string.min.js"></script>
+</head>
+<body>
+<h1>Playing</h1>
+<br>
+<h2 id="title"></h2>
+<br>
+        <audio controls id="nash">
+            <source id="src" type="audio/mpeg">
+      </audio>
+      <button id="start">Start!</button><br>
+      <div id="form" style="display: none; width: 100%; padding: 10px;">
+        <input type="text" style="width: 60%;" id="vals">
+        <button id="submit" style="width: 30%">Submit</button>
+      </div>
+      <h1 id="res"></h1>
+      <script>
+      let audio = document.getElementById('nash');
+      let start = document.getElementById('start');
+      let title = document.getElementById('title');
+      let form = document.getElementById('form');
+      let input = document.getElementById('vals');
+      let submit = document.getElementById('submit');
+      let res;
+      let yay = document.getElementById('res');
+      let score = 0;
+      start.onclick = function() {
+          socket.emit('newsong', {})
+          start.style.display = "none";
+      }
+
+      socket.on('newone', function(name, author) {
+        res = [name, author];
+        title.innerHTML = name;
+        audio.src = "/files/"+name+".mp3"
+        form.style.display = "block";
+      })
+
+
+      submit.onclick = function() {
+        let q = input.value;
+        if (q.includes(res[1])) {
+            yay.innerHTML = "yay! Score: "+(score++);
+            socket.emit('newsong', {})
+        } else {
+            yay.innerHTML = "nope"
+        }
+      }
+
+      </script>
+
+</body>
+</html>
